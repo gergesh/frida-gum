@@ -14,7 +14,7 @@ RELAXED_DEPS = {
 }
 
 EXACT_DEPS = {
-    "frida-java-bridge": "6.3.5",
+    "frida-java-bridge": "6.3.7",
     "frida-objc-bridge": "7.0.6",
     "frida-swift-bridge": "2.0.8"
 }
@@ -37,6 +37,12 @@ def main(argv):
 
 def generate_runtime(output_dir, priv_dir, input_dir, gum_dir, capstone_incdir, libtcc_incdir, npm, quickcompile, backends, arch, endian):
     frida_compile = priv_dir / "node_modules" / ".bin" / make_script_filename("frida-compile")
+
+    subprocess.run([npm, "link", "frida-java-bridge"],
+                   capture_output=True,
+                   cwd=priv_dir,
+                   check=True)
+
     if not frida_compile.exists():
         if priv_dir.exists():
             shutil.rmtree(priv_dir)
